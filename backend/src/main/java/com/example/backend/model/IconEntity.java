@@ -16,6 +16,6 @@ public class IconEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long iconId;
-    private String iconImage;
-    private String iconWord;
+    private String font;
+    private String name;
 }

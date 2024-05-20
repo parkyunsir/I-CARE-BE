@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class IconDTO {
     private Long iconId;
-    private String iconImage;
+    private String font;
 
     public IconDTO(IconEntity entity) {
         this.iconId = entity.getIconId();
-        this.iconImage = entity.getIconImage();
+        this.font = entity.getFont();
     }
 }
