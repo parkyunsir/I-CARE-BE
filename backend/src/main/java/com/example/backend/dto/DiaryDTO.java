@@ -17,7 +17,7 @@ public class DiaryDTO {
     private String diaryId;
     private LocalDate date;
     private String content;
-    private String iconId;
+    private Long iconId;
 
     public DiaryDTO(DiaryEntity entity) {
         this.diaryId = entity.getDiaryId();

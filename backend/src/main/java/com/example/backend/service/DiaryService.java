@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -32,6 +33,14 @@ public class DiaryService {
             throw new RuntimeException("Not the owner of the diary");
         }
         return entity;
+    }
+
+    public List<DiaryEntity> showMonthlyList(String parentId, String childId, Long month) {
+        /*if(parentId.equals(childRepository.findBychildId(childId).getParentId())) {
+            log.error("Child's parent and current parent do not match.");
+            throw new RuntimeException("Child's parent and current parent do not match.");
+        }*/
+        return diaryRepository.findByDateMonth(month);
     }
 
     public DiaryEntity update(DiaryEntity entity) {

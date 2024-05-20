@@ -17,6 +17,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -35,7 +36,7 @@ public class DiaryControllerTest {
         final String url = "/api/diary";
         final String childId = "temporary-childId";
         final String content = "temporary-content";
-        final String iconId = "temporary-icon";
+        final Long iconId = 1L;
         final DiaryDTO dto = DiaryDTO.builder()
                 .content(content)
                 .iconId(iconId)
@@ -65,6 +66,23 @@ public class DiaryControllerTest {
                 .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
+        result.andDo(print());
+    }
+
+    @DisplayName("showDiaryMonthlyList : 일기 월별 리스트 보기에 성공한다.")
+    @Test
+    public void showDiaryMonthlyList() throws Exception {
+        DiaryEntity savedEntity = saveDiaryEntityOnRepository();
+        final String url = "/api/diary/list";
+        final String childId = "temporary-childId";
+
+        final String requestParam = "?childId=" + childId + "&month=" + 5;
+
+        final ResultActions result = mockMvc.perform(get(url + requestParam)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isOk());
+        result.andDo(print());
     }
 
     @DisplayName("updateDiary: 일기 수정에 성공한다.")
@@ -126,7 +144,7 @@ public class DiaryControllerTest {
         final String childId = "temporary-childId";
         final LocalDate date = LocalDate.now();
         final String content = "temporary-content";
-        final String iconId = "temporary-iconId";
+        final Long iconId = 1L;
         DiaryEntity entity = DiaryEntity.builder()
                 .diaryId(diaryId)
                 .parentId(parentId)

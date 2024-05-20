@@ -9,13 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/diary")
 public class DiaryController {
     @Autowired
     private DiaryService diaryService;
-
+    // 추후 @AuthenticationPrincipal String parentId 추가 : DiaryController, DiaryControllerTest 수정
     @PostMapping
     public ResponseEntity<?> createDiary(@RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
         try {
@@ -35,14 +37,7 @@ public class DiaryController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-// 할일
-// @RequestParam("parentId") String parentId 추가해서 DiaryController, DiaryControllerTest 수정 (@AuthenticationPrincipal 준비)
-// IconEntity : iconId, iconImage, keyword
-// iconImage 파일 찾기(keyword와 함께)
-// showDiaryDetail, showDiaryList 실행할 때 iconImage도 같이 보이도록 하기
-// 5월의 일기 리스트(반환 : diaryId, date, iconImage)
-// content 분석해서(단어를 뽑아낸다든지) icon 배열[3] 반환
-// 다음이 wordCloud : diary 5개 모이면 wordCloud 생성 가능(이미지 파일로)
+
     @GetMapping
     public ResponseEntity<?> showDiaryDetail(@RequestParam("childId") String childId, @RequestParam("diaryId") String diaryId) {
         String temporaryParentId = "temporary-parentId";
@@ -51,6 +46,16 @@ public class DiaryController {
 
         DiaryDTO dto = new DiaryDTO(entity);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> showDiaryMonthlyList(@RequestParam("childId") String childId, @RequestParam("month") Long month) {
+        String temporaryParentId = "temporary-parentId";
+        String parentId = temporaryParentId;
+        List<DiaryEntity> entities = diaryService.showMonthlyList(parentId, childId, month);
+
+        List<DiaryDTO> dtos = entities.stream().map(DiaryDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok().body(dtos);
     }
 
     @PutMapping
