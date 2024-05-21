@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name="ChatBot")
-public class ChatBotEntity {
+public class ChatBotFeedbackEntity {
 
     @Id //기본키
     @GeneratedValue(generator = "system-uuid")

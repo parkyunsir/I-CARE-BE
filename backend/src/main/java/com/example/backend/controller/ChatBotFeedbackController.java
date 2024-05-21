@@ -1,13 +1,13 @@
 package com.example.backend.controller;
 
-import com.example.backend.service.ChatBotService;
+import com.example.backend.service.ChatBotFeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/chatbot")
-public class ChatBotController {
+public class ChatBotFeedbackController {
     @Autowired
-    private ChatBotService service;
+    private ChatBotFeedbackService service;
 }
