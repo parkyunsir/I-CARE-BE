@@ -6,6 +6,7 @@ import com.example.backend.model.DiaryEntity;
 import com.example.backend.service.DiaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,12 +20,12 @@ public class DiaryController {
     private DiaryService diaryService;
     // 추후 @AuthenticationPrincipal String parentId 추가 : DiaryController, DiaryControllerTest 수정
     @PostMapping
-    public ResponseEntity<?> createDiary(@RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
+    public ResponseEntity<?> createDiary(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
         try {
-            String temporaryParentId = "temporary-parentId";
+            //String temporaryParentId = "temporary-parentId";
             DiaryEntity entity = DiaryDTO.toEntity(dto);
             entity.setDiaryId(null);
-            entity.setParentId(temporaryParentId);
+            entity.setParentId(parentId);
             entity.setChildId(childId);
             entity.setDate(LocalDate.now()); // 오늘 날짜 설정
             DiaryEntity savedEntity = diaryService.create(entity);
@@ -39,9 +40,9 @@ public class DiaryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> showDiaryDetail(@RequestParam("childId") String childId, @RequestParam("diaryId") String diaryId) {
-        String temporaryParentId = "temporary-parentId";
-        String parentId = temporaryParentId;
+    public ResponseEntity<?> showDiaryDetail(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestParam("diaryId") String diaryId) {
+        //String temporaryParentId = "temporary-parentId";
+        //String parentId = temporaryParentId;
         DiaryEntity entity = diaryService.showDetail(parentId, childId, diaryId);
 
         DiaryDTO dto = new DiaryDTO(entity);
@@ -49,9 +50,9 @@ public class DiaryController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> showDiaryMonthlyList(@RequestParam("childId") String childId, @RequestParam("month") Long month) {
-        String temporaryParentId = "temporary-parentId";
-        String parentId = temporaryParentId;
+    public ResponseEntity<?> showDiaryMonthlyList(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestParam("month") Long month) {
+        //String temporaryParentId = "temporary-parentId";
+        //String parentId = temporaryParentId;
         List<DiaryEntity> entities = diaryService.showMonthlyList(parentId, childId, month);
 
         List<DiaryDTO> dtos = entities.stream().map(DiaryDTO::new).collect(Collectors.toList());
@@ -59,9 +60,9 @@ public class DiaryController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateDiary(@RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
-        String temporaryParentId = "temporary-parentId";
-        String parentId = temporaryParentId;
+    public ResponseEntity<?> updateDiary(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
+        //String temporaryParentId = "temporary-parentId";
+        //String parentId = temporaryParentId;
         DiaryEntity entity = DiaryDTO.toEntity(dto);
         entity.setParentId(parentId);
         entity.setChildId(childId);
@@ -72,10 +73,10 @@ public class DiaryController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteDiary(@RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
+    public ResponseEntity<?> deleteDiary(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestBody DiaryDTO dto) {
         try {
-            String temporaryParentId = "temporary-parentId";
-            String parentId = temporaryParentId;
+            //String temporaryParentId = "temporary-parentId";
+            //String parentId = temporaryParentId;
             DiaryEntity entity = DiaryDTO.toEntity(dto);
             entity.setParentId(parentId);
             entity.setChildId(childId);
