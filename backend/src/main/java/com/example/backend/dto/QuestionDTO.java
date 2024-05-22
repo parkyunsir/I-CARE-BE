@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class QuestionDTO {
-    private String diaryId;
+    private String questionId;
     private LocalDate date;
     private String input;
     private String output;
 
     public QuestionDTO(QuestionEntity entity) {
-        this.diaryId = entity.getQuestionId();
+        this.questionId = entity.getQuestionId();
         this.date = entity.getDate();
         this.input = entity.getInput();
         this.output = entity.getOutput();
@@ -25,7 +25,7 @@ public class QuestionDTO {
 
     public static QuestionEntity toEntity(QuestionDTO dto){
         return QuestionEntity.builder()
-                .questionId(dto.getDiaryId())
+                .questionId(dto.getQuestionId())
                 .date(dto.getDate())
                 .input(dto.getInput())
                 .output(dto.getOutput())
