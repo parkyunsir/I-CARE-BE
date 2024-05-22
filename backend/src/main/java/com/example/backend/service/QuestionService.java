@@ -28,7 +28,7 @@ public class QuestionService {
     }
 
     // 리스트 보여주기
-    public List<QuestionEntity> showList() {
+    public List<QuestionEntity> showList(String questionId) {
         return questionRepository.findAll();
     }
 

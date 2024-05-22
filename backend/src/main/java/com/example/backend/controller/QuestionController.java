@@ -42,10 +42,10 @@ public class QuestionController {
 
     // 리스트 보여주기
     @GetMapping("/list")
-    public ResponseEntity<?> showQuestionList() {
+    public ResponseEntity<?> showQuestionList(@RequestParam("qid") String questionId) {
         String temporaryParentId = "temporary-parentId";
         String parentId = temporaryParentId;
-        List<QuestionEntity> entities = questionService.showList();
+        List<QuestionEntity> entities = questionService.showList(questionId);
         List<QuestionDTO> dtos = entities.stream().map(QuestionDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(dtos);
 

@@ -1,7 +1,7 @@
 package com.example.backend.security;
 
 
-import com.example.demo.model.UserEntity;
+import com.example.backend.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
