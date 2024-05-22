@@ -27,6 +27,7 @@ public class QuestionController {
         try {
             QuestionEntity entity = QuestionDTO.toEntity(dto);
             entity.setQuestionId(null);
+            entity.setParentId(parentId); //부모 아이디 설정
             entity.setDate(LocalDate.now()); // 지금 시간
             QuestionEntity savedEntity = questionService.answer(entity);
 
