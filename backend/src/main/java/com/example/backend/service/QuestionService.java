@@ -18,18 +18,19 @@ public class QuestionService {
     // 답변하기
     public QuestionEntity answer(QuestionEntity entity) {
         validate(entity);
-        if (questionRepository.existsByDate(entity.getDate())) { // 작성한 게 있는지 check
-            log.warn("A question for that date already exists.");
-            throw new RuntimeException("A question for that date already exists."); // 있다면 오류 발생
-        }
+//        if (questionRepository.existsByDate(entity.getDate())) { // 작성한 게 있는지 check
+//            log.warn("A question for that date already exists.");
+//            throw new RuntimeException("A question for that date already exists.");
+//        }
         QuestionEntity savedEntity = questionRepository.save(entity); // 없다면 추가하기
         log.info("Entity Id : {} is saved.", savedEntity.getQuestionId());
         return questionRepository.findByQuestionId(savedEntity.getQuestionId());
     }
 
     // 리스트 보여주기
-    public List<QuestionEntity> showList(String questionId) {
-        return questionRepository.findAll();
+    public List<QuestionEntity> showList(final String parentId) {
+        //일치하는 부모Id만 보여주기
+        return questionRepository.findByParentId(parentId);
     }
 
     // 유효성 검사
@@ -45,8 +46,8 @@ public class QuestionService {
         if (entity.getQuestionId() != null) {
             QuestionEntity original = questionRepository.findByQuestionId(entity.getQuestionId());
             if (!original.getParentId().equals(entity.getParentId())) {
-                log.warn("Not the owner of the diary");
-                throw new RuntimeException("Not the owner of the diary");
+                log.warn("Not the owner of the question");
+                throw new RuntimeException("Not the owner of the question");
             }
         }
     }
