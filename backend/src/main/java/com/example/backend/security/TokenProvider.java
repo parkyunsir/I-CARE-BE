@@ -1,6 +1,7 @@
 package com.example.backend.security;
 
 
+
 import com.example.backend.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,13 +12,14 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import com.example.backend.model.ParentEntity;
 
 @Slf4j
 @Service
 public class TokenProvider {
     private static final String SECRET_KEY = "dkfspdoivlkrsnhjkhbjbjlksmoig43yg9hdkgn";
 
-    public String create(UserEntity userEntity){
+    public String create(ParentEntity parentEntity){
         // 기한 지금으로 부터 1일로 설정
         Date expiryDate = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
 
@@ -26,7 +28,7 @@ public class TokenProvider {
                 // header에 들어갈 내용 및 서명을 하기 위한 SECRET_KEY
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 // payload에 들어갈 내용
-                .setSubject(userEntity.getId()) // sub
+                .setSubject(parentEntity.getParentId()) // sub
                 .setIssuer("demo app") // iss
                 .setIssuedAt(new Date()) // iat
                 .setExpiration(expiryDate) // exp
