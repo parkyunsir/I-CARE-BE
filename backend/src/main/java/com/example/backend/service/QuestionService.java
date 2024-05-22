@@ -33,6 +33,11 @@ public class QuestionService {
         return questionRepository.findByParentId(parentId);
     }
 
+    // 검색하기
+    public List<QuestionEntity> searchLIst(final String output) {
+        return questionRepository.findAllByOutputContaining(output);
+    }
+
     // 유효성 검사
     public void validate(QuestionEntity entity) {
         if (entity == null) {
