@@ -49,4 +49,14 @@ public class QuestionController {
         return ResponseEntity.ok().body(dtos);
 
     }
+    
+    // 검색하기 - output(답변)
+    @GetMapping // api/question?output=
+    public ResponseEntity<?> searchQuestionList(@AuthenticationPrincipal String parentId, @RequestParam String output) {
+        List<QuestionEntity> entities = questionService.searchLIst(output);
+
+        List<QuestionDTO> dtos = entities.stream().map(QuestionDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok().body(dtos);
+    }
+
 }
