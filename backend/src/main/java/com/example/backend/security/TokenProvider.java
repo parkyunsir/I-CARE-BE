@@ -1,6 +1,8 @@
 package com.example.backend.security;
 
-import com.example.backend.model.ParentEntity;
+
+
+import com.example.backend.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import com.example.backend.model.ParentEntity;
 
 @Slf4j
 @Service
