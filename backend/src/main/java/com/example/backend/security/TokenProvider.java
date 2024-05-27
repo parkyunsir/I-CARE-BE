@@ -1,5 +1,7 @@
 package com.example.backend.security;
 
+
+import com.example.backend.model.ParentEntity;
 import com.example.backend.repository.ParentRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,10 +18,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
-import java.util.Set;
-
-import com.example.backend.model.ParentEntity;
-import com.example.backend.repository.ParentRepository;
 
 @Slf4j
 @Service
