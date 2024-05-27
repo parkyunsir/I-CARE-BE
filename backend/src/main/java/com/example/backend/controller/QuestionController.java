@@ -41,7 +41,7 @@ public class QuestionController {
     }
 
     // 리스트 보여주기
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<?> showQuestionList(@AuthenticationPrincipal String parentId) {
         List<QuestionEntity> entities = questionService.showList(parentId);
 
