@@ -2,6 +2,8 @@ package com.example.backend.repository;
 
 import com.example.backend.model.QuestionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,4 +15,9 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, String
 
     //내용 검색
     List<QuestionEntity> findAllByOutputContaining(String output);
+
+    List<QuestionEntity> findByChildId(String childId);
+
+    @Query(value = "SELECT * FROM Question WHERE child_id = :childId and date =: date", nativeQuery = true)
+    QuestionEntity existsByChildIdAndDate(@Param("childId") String childId, @Param("date") LocalDate date);
 }

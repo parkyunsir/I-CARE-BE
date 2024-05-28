@@ -22,6 +22,7 @@ public class QuestionEntity {
     private String questionId;
 
     private String parentId;
+    private String childId;
 
     private LocalDate date;
     private String input; //질문 ex) 가장 좋아하는 놀이가 뭐니?
