@@ -51,7 +51,7 @@ public class QuestionController {
     }
     
     // 검색하기 - output(답변)
-    @GetMapping // api/question?output=
+    @GetMapping("/search") // api/question?output=
     public ResponseEntity<?> searchQuestionList(@AuthenticationPrincipal String parentId, @RequestParam String output) {
         List<QuestionEntity> entities = questionService.searchLIst(output);
 
