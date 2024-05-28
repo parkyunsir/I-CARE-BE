@@ -22,13 +22,17 @@ public class ParentEntity implements UserDetails {
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy="uuid")
-    private String id;
+    private String parent_id;
 
     private String email;
 
     private String password;
 
     private String nickname;
+
+    private String address;
+
+
 
     public ParentEntity update(String nickname) {
         this.nickname = nickname;

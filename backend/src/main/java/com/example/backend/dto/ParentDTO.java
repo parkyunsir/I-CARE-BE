@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ParentDTO {
     private String token;
-    private String id;
+    private String parent_id;
     private String email;
     private String password;
     private String nickname;
+    private String address;
 }
