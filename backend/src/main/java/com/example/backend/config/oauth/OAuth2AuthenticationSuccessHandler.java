@@ -1,5 +1,6 @@
 package com.example.backend.config.oauth;
 
+import com.example.backend.model.ParentEntity;
 import com.example.backend.security.TokenProvider;
 import com.example.backend.service.ParentService;
 import jakarta.servlet.ServletException;
@@ -36,16 +37,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         Map<String, Object> kakao_account = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         String email = (String) kakao_account.get("email");
+
         if (email == null) {
             email = "kakao_email";
         }
+
         Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
         String nickname = (String) properties.get("nickname");
 
-        //Parent parent = parentService.login(email);
+        //ParentEntity parent = parentService.login(email);
 
         //HttpSession session = request.getSession();
         //session.setAttribute("parent", parent);
+
         String jwt = tokenProvider.createForOAuth("kakao", email, nickname);
 
         String url = makeRedirectUrl(jwt);

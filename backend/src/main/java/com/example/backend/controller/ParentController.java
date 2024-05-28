@@ -29,7 +29,7 @@ public class ParentController {
 
     final private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @PostMapping("")
+    @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody ParentDTO parentDto) {
         try {
             if(parentDto == null || parentDto.getPassword() == null) {
