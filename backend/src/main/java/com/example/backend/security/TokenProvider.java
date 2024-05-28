@@ -72,14 +72,15 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_PARENT"));
+        String userEmail = claims.getSubject(); // 토큰에서 이메일을 가져옴
+        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")); // 사용자의 권한 설정 (예시로 ROLE_USER)
         return new UsernamePasswordAuthenticationToken(
-                new org.springframework.security.core.userdetails.User(
-                        claims.getSubject(), "", authorities
-                ),
-                token, authorities
+                userEmail, // 사용자 이름으로 이메일을 사용
+                null, // 비밀번호 필드 (비밀번호 인증 방식이 아닌 경우 null 사용)
+                authorities
         );
     }
+
 
     private Claims getClaims(String token) {
         return Jwts.parser()

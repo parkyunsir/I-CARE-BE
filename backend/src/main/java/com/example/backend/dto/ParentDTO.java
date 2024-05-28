@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParentDTO {
+    private String token;
     private String id;
     private String email;
     private String password;
     private String nickname;
-    private String token;
 }
