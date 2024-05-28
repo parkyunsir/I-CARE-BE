@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.io.File;
 import java.time.LocalDateTime;
 
 @Builder
@@ -18,10 +17,11 @@ import java.time.LocalDateTime;
 @Table(name="Profile")
 public class ProfileEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long profileId;
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy="uuid")
+    private String profileId;
     private String parentId;
     private String childId;
-    private File wordCloud;
+    private String wordCloud;
     private LocalDateTime date;
 }

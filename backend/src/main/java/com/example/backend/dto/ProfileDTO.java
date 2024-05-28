@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.time.LocalDateTime;
 
 @Builder
@@ -15,8 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class ProfileDTO {
-    private Long profileId;
-    private File wordCloud;
+    private String profileId;
+    private String wordCloud;
     private LocalDateTime date;
 
     public ProfileDTO(ProfileEntity entity) {
