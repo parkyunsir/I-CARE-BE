@@ -23,7 +23,7 @@ public class QuestionController {
 
     // 작성하기
     @PostMapping //@AuthenticationPrincipal String userId
-    public ResponseEntity<?> answerQuestion(@AuthenticationPrincipal String parentId, @RequestBody QuestionDTO dto) {
+    public ResponseEntity<?> addQuestion(@AuthenticationPrincipal String parentId, @RequestBody QuestionDTO dto) {
         try {
             QuestionEntity entity = QuestionDTO.toEntity(dto);
             entity.setQuestionId(null);

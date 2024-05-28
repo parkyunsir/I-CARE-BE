@@ -18,7 +18,7 @@ public class QuestionService {
     // 답변하기
     public QuestionEntity answer(QuestionEntity entity) {
         validate(entity);
-        if (questionRepository.existsByDate(entity.getDate())) { // 오늘 작성한 게 있는지 check
+        if (questionRepository.existsByChildIdAndDate(entity.getChildId(), entity.getDate()) != null){
             log.warn("A question for that date already exists.");
             throw new RuntimeException("A question for that date already exists.");
         }
@@ -44,10 +44,10 @@ public class QuestionService {
             log.warn("Entity cannot be null.");
             throw new RuntimeException("Entity cannot be null.");
         }
-        if (entity.getParentId() == null) {
-            log.warn("Unknown parent");
-            throw new RuntimeException("Unknown parent");
-        }
+//        if (entity.getParentId() == null) {
+//            log.warn("Unknown parent");
+//            throw new RuntimeException("Unknown parent");
+//        }
         if (entity.getQuestionId() != null) {
             QuestionEntity original = questionRepository.findByQuestionId(entity.getQuestionId());
             if (!original.getParentId().equals(entity.getParentId())) {
