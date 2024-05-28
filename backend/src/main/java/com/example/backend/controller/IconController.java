@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 public class IconController {
     @Autowired
     private IconService iconService;
-/*
-    @GetMapping
+
+    @GetMapping("/select")
     public ResponseEntity<?> offerIconList(@RequestParam("content") String content) {
         List<IconEntity> entities = iconService.offerList(content);
         List<IconDTO> dtos = entities.stream().map(IconDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(dtos);
-    }*/
+    }
 
     @GetMapping
     public ResponseEntity<?> showIcon(@RequestParam("iconId") Long iconId) {

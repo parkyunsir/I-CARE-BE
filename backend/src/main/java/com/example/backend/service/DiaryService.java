@@ -35,12 +35,12 @@ public class DiaryService {
         return entity;
     }
 
-    public List<DiaryEntity> showMonthlyList(String parentId, String childId, Long month) {
+    public List<DiaryEntity> showDateList(String parentId, String childId, LocalDate startDate, LocalDate endDate) {
         /*if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }*/
-        return diaryRepository.findByMonthAndChildId(childId, month);
+        return diaryRepository.findByStartDateAndEndDateAndChildId(childId, startDate, endDate);
     }
 
     public DiaryEntity update(DiaryEntity entity) {

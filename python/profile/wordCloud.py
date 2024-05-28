@@ -1,6 +1,7 @@
 import sys
 import re
-#from konlpy.tag import Okt
+from konlpy.tag import Okt
+#import jpype
 from openkoreantext import OpenKoreanTextProcessor # faster
 from collections import Counter
 from wordcloud import WordCloud
@@ -33,7 +34,7 @@ def getWordCloud(diaryFile, fileName):
     wc = WordCloud(fontPath, background_color='white', width=800, height=600)
     cloud = wc.generate_from_frequencies(wordCount)
     
-    cloud.to_file('../python/profile/cloud_images/'+fileName)
+    cloud.to_file('../python/profile/images/'+fileName)
 
 if __name__ == '__main__':
     print("process start")

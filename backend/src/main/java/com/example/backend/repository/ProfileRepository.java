@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<ProfileEntity, String> {
-    @Query(value = "SELECT * FROM Profile WHERE child_id = :childId ORDER BY date DESC", nativeQuery = true)
+    @Query(value = "SELECT * FROM Profile WHERE child_id = :childId", nativeQuery = true)
     List<ProfileEntity> findByChildId(@Param("childId") String childId);
+
+    ProfileEntity findByProfileId(String profileId);
 }

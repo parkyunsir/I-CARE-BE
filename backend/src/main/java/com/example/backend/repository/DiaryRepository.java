@@ -17,6 +17,6 @@ public interface DiaryRepository extends JpaRepository<DiaryEntity, String> {
 
     List<DiaryEntity> findByChildId(String childId);
 
-    @Query(value = "SELECT * FROM Diary WHERE child_id = :childId and MONTH(date) = :month", nativeQuery = true)
-    List<DiaryEntity> findByMonthAndChildId(@Param("childId") String childId, @Param("month") Long month);
+    @Query(value = "SELECT * FROM Diary WHERE child_id = :childId and date BETWEEN :start and :end", nativeQuery = true)
+    List<DiaryEntity> findByStartDateAndEndDateAndChildId(@Param("childId") String childId, @Param("start") LocalDate startDate, @Param("end") LocalDate endDate);
 }
