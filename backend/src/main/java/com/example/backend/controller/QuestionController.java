@@ -41,7 +41,7 @@ public class QuestionController {
     }
 
     // 리스트 보여주기
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<?> showQuestionList(@AuthenticationPrincipal String parentId) {
         List<QuestionEntity> entities = questionService.showList(parentId);
 
@@ -51,7 +51,7 @@ public class QuestionController {
     }
     
     // 검색하기 - output(답변)
-    @GetMapping // api/question?output=
+    @GetMapping("/search") // api/question?output=
     public ResponseEntity<?> searchQuestionList(@AuthenticationPrincipal String parentId, @RequestParam String output) {
         List<QuestionEntity> entities = questionService.searchLIst(output);
 

@@ -6,9 +6,14 @@ import com.example.backend.repository.DiaryRepository;
 import com.example.backend.repository.ProfileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +21,40 @@ import java.util.List;
 @Slf4j
 @Service
 public class ProfileService {
+    private final String pythonProfilePath;
     @Autowired
     private ProfileRepository profileRepository;
     @Autowired
     private DiaryRepository diaryRepository;
+
+    public ProfileService(@Value("${python.profile.path}") String pythonProfilePath) {
+        this.pythonProfilePath = pythonProfilePath;
+    }
+
+    public List<ProfileEntity> showList(String parentId, String childId) {
+        validate(parentId, childId);
+        return profileRepository.findByChildId(childId);
+    }
+
+    public ProfileEntity show(String parentId, String childId, String profileId) {
+        validate(parentId, childId);
+        if(!childId.equals(profileRepository.findByProfileId(profileId).getChildId())) {
+            log.error("Not the owner of the profile");
+            throw new RuntimeException("Not the owner of the profile");
+        }
+        return profileRepository.findByProfileId(profileId);
+    }
+
+    public Resource getImage(String parentId, String childId, String profileId) {
+        try {
+            ProfileEntity entity = show(parentId, childId, profileId);
+            String fileName = entity.getWordCloud();
+            Path file = Paths.get(pythonProfilePath + "/images/").resolve(fileName);
+            return new UrlResource(file.toUri());
+        } catch(Exception e) {
+            throw new RuntimeException("Could not read file: ", e);
+        }
+    }
 
     public ProfileEntity create(String parentId, String childId) {
         validate(parentId, childId);
@@ -53,7 +88,9 @@ public class ProfileService {
 
             ProfileEntity entity = ProfileEntity.builder()
                     .profileId(null)
-                    .wordCloud(new File("../python/profile/cloud_images/" + fileName))
+                    .parentId(parentId)
+                    .childId(childId)
+                    .wordCloud(fileName)
                     .date(LocalDateTime.now())
                     .build();
             return profileRepository.save(entity);
@@ -61,11 +98,6 @@ public class ProfileService {
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    public List<ProfileEntity> showList(String parentId, String childId) {
-        validate(parentId, childId);
-        return profileRepository.findByChildId(childId);
     }
 
     public void validate(String parentId, String childId) {
@@ -76,14 +108,14 @@ public class ProfileService {
     }
 
     public Process runPythonWordCloud(String childId, String fileName) throws IOException {
-        String pythonWordCloud = "../python/profile/wordCloud.py";
+        String pythonWordCloud = pythonProfilePath + "/wordCloud.py";
         return startPythonProcess(pythonWordCloud, childId, fileName);
     }
 
     public Process startPythonProcess(String pythonWordCloud, String childId, String fileName) throws IOException {
         List<DiaryEntity> diaryList = diaryRepository.findByChildId(childId);
 
-        File diaryFile = new File("../python/profile/diary.txt");
+        File diaryFile = new File(pythonProfilePath + "/diary.txt");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(diaryFile))) {
             for (DiaryEntity diary : diaryList) {
@@ -93,7 +125,7 @@ public class ProfileService {
         }
 
         List<String> command = new ArrayList<>();
-        command.add("../python/profile/venv/Scripts/activate.bat");
+        command.add(pythonProfilePath + "/venv/Scripts/activate.bat");
         command.add("&&");
         command.add("python");
         command.add(pythonWordCloud);

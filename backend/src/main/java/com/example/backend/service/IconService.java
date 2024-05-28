@@ -11,10 +11,10 @@ import java.util.List;
 public class IconService {
     @Autowired
     private IconRepository iconRepository;
-/*
-    public List<IconEntity> offerList(String content) {
 
-    }*/
+    public List<IconEntity> offerList(String content) {
+        return iconRepository.findAll();
+    }
 
     public IconEntity show(Long iconId) {
         return iconRepository.findByIconId(iconId);
