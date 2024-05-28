@@ -18,6 +18,6 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, String
 
     List<QuestionEntity> findByChildId(String childId);
 
-    @Query(value = "SELECT * FROM Question WHERE child_id = :childId and date =: date", nativeQuery = true)
+    @Query(value = "SELECT * FROM Question WHERE child_id = :childId and date = :date", nativeQuery = true)
     QuestionEntity existsByChildIdAndDate(@Param("childId") String childId, @Param("date") LocalDate date);
 }
