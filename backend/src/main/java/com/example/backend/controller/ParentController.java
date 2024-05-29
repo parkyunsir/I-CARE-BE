@@ -29,7 +29,7 @@ public class ParentController {
 
     final private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @PostMapping("")
+    @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody ParentDTO parentDto) {
         try {
             if(parentDto == null || parentDto.getPassword() == null) {
@@ -42,7 +42,7 @@ public class ParentController {
                     .build();
             ParentEntity savedParent = parentService.signup(parent);
             ParentDTO savedParentDto = ParentDTO.builder()
-                    .id(savedParent.getId())
+                    .parent_id(savedParent.getParent_id())
                     .email(savedParent.getEmail())
                     .nickname(savedParent.getNickname())
                     .build();
@@ -64,7 +64,7 @@ public class ParentController {
         if(parent != null) {
             final String token = tokenProvider.create(parent);
             final ParentDTO loginParentDto = ParentDTO.builder()
-                    .id(parent.getId())
+                    .parent_id(parent.getParent_id())
                     .email(parent.getEmail())
                     .nickname(parent.getNickname())
                     .token(token)

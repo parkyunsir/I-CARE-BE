@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParentDTO {
-    private String id;
+    private String token;
+    private String parent_id;
     private String email;
     private String password;
     private String nickname;
-    private String token;
+    private String address;
 }
