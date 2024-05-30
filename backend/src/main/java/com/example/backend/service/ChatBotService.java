@@ -10,6 +10,7 @@ import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,6 +72,17 @@ public class ChatBotService {
                     .path("content")
                     .asText();
         }
+    }
+
+    @Transactional
+    public List<ChatBotEntity> delete(String parentId, String childId) {
+        ChatBotEntity entity = ChatBotEntity.builder()
+                        .parentId(parentId)
+                        .childId(childId)
+                        .build();
+        validate(entity);
+        chatBotRepository.deleteByParentIdAndChildId(parentId, childId);
+        return chatBotRepository.findByChildId(childId);
     }
 
     public void validate(ChatBotEntity entity) {

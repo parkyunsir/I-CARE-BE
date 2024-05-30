@@ -36,4 +36,17 @@ public class ChatBotController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteChatBot(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId) {
+        try {
+            List<ChatBotEntity> entities = chatBotService.delete(parentId, childId);
+            List<ChatBotDTO> dtos = entities.stream().map(ChatBotDTO::new).collect(Collectors.toList());
+            return ResponseEntity.ok().body(dtos);
+        } catch(Exception e) {
+            String error = e.getMessage();
+            ResponseDTO<ChatBotDTO> response = ResponseDTO.<ChatBotDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }
