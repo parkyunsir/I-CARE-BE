@@ -52,8 +52,8 @@ public class QuestionController {
     }
     
     // 검색하기 - output(답변)
-    @GetMapping("/search") // api/question/search?output=
-    public ResponseEntity<?> searchQuestionList(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestParam String output) {
+    @GetMapping("/search") // api/question/search?childId={}&output={}
+    public ResponseEntity<?> searchQuestionList(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestParam("output") String output) {
         List<QuestionEntity> entities = questionService.searchLIst(output);
 
         List<QuestionDTO> dtos = entities.stream().map(QuestionDTO::new).collect(Collectors.toList());
