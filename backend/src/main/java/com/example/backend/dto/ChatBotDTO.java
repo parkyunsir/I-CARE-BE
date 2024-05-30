@@ -1,5 +1,6 @@
 package com.example.backend.dto;
 
+import com.example.backend.model.ChatBotEntity;
 import com.example.backend.model.ChatBotFeedbackEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,7 @@ public class ChatBotDTO {
     }
 
     public static ChatBotEntity toEntity(final ChatBotDTO dto) {
-        return ChatBotFeedbackEntity.builder()
+        return ChatBotEntity.builder()
                 .chatBotId(dto.getChatBotId())
                 .parentId(dto.getParentId())
                 .childId(dto.getChildId())
