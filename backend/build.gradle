@@ -35,6 +35,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.security:spring-security-oauth2-core'
+
+	implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 }
 
 tasks.named('test') {
