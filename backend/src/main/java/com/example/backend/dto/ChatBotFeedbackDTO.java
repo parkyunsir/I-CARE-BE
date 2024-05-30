@@ -6,30 +6,33 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class ChatBotFeedbackDTO {
-    private Long chatId; //대화id
-    private LocalDate date; //날짜
-    private LocalDate inputTime; //입력 시간
+    private String chatBotFeedbackId;
+    private String parentId;
+    private String childId;
+    private LocalDateTime date; //날짜
     private String feedback; //피드백
 
     public ChatBotFeedbackDTO(ChatBotFeedbackEntity entity) {
-        this.chatId = entity.getChatId();
+        this.chatBotFeedbackId = entity.getChatBotFeedbackId();
+        this.parentId = entity.getParentId();
+        this.childId = entity.getChildId();
         this.date = entity.getDate();
-        this.inputTime = entity.getInputTime();
         this.feedback = entity.getFeedback();
     }
 
     public static ChatBotFeedbackEntity toEntity(final ChatBotFeedbackDTO dto) {
         return ChatBotFeedbackEntity.builder()
-                .chatId(dto.getChatId())
+                .chatBotFeedbackId(dto.getChatBotFeedbackId())
+                .parentId(dto.getParentId())
+                .childId(dto.getChildId())
                 .date(dto.getDate())
-                .inputTime(dto.getInputTime())
                 .feedback(dto.getFeedback())
                 .build();
     }

@@ -18,4 +18,5 @@ public class IconEntity {
     private Long iconId;
     private String font;
     private String name;
+    private String category;
 }
