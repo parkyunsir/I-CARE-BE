@@ -10,24 +10,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="ChatBotFeedback")
-public class ChatBotFeedbackEntity {
-
+@Table(name="ChatBot")
+public class ChatBotEntity {
     @Id //기본키
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String chatBotFeedbackId;
+    private String chatBotId;
 
     private String parentId;
     private String childId;
-    private LocalDateTime date;
-    private String feedback;
+    private String request;
+    private String response;
+
 }
