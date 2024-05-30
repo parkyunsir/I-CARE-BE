@@ -22,5 +22,5 @@ def validate_and_fix_jsonl(file_path):
         file.writelines(fixed_lines)
 
 # Usage
-file_path = 'learningData.jsonl'
+file_path = 'feedbackData.jsonl'
 validate_and_fix_jsonl(file_path)
