@@ -17,7 +17,7 @@ public class DiaryService {
 
     public DiaryEntity create(DiaryEntity entity) {
         validate(entity);
-        if(diaryRepository.existsByDate(entity.getDate())) {
+        if(diaryRepository.findByChildIdAndDate(entity.getChildId(), entity.getDate()) != null) {
             log.warn("A diary for that date already exists.");
             throw new RuntimeException("A diary for that date already exists.");
         }
@@ -35,12 +35,12 @@ public class DiaryService {
         return entity;
     }
 
-    public List<DiaryEntity> showMonthlyList(String parentId, String childId, Long month) {
-        /*if(parentId.equals(childRepository.findBychildId(childId).getParentId())) {
+    public List<DiaryEntity> showDateList(String parentId, String childId, LocalDate startDate, LocalDate endDate) {
+        /*if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }*/
-        return diaryRepository.findByDateMonth(month);
+        return diaryRepository.findByStartDateAndEndDateAndChildId(childId, startDate, endDate);
     }
 
     public DiaryEntity update(DiaryEntity entity) {
@@ -68,11 +68,11 @@ public class DiaryService {
         if(entity == null) {
             log.warn("Entity cannot be null.");
             throw new RuntimeException("Entity cannot be null.");
-        }
+        }/*
         if(entity.getParentId() == null || entity.getChildId() == null) {
             log.warn("Unknown parent or child.");
             throw new RuntimeException("Unknown parent or child.");
-        }/*
+        }*//*
         if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");

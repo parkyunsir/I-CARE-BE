@@ -1,4 +1,5 @@
 package com.example.backend.dto;
+
 import com.example.backend.model.QuestionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +14,13 @@ import java.time.LocalDate;
 public class QuestionDTO {
     private String questionId;
     private LocalDate date;
-    private String input;
+    private String inputId;
     private String output;
 
     public QuestionDTO(QuestionEntity entity) {
         this.questionId = entity.getQuestionId();
         this.date = entity.getDate();
-        this.input = entity.getInput();
+        this.inputId = entity.getInputId();
         this.output = entity.getOutput();
     }
 
@@ -27,7 +28,7 @@ public class QuestionDTO {
         return QuestionEntity.builder()
                 .questionId(dto.getQuestionId())
                 .date(dto.getDate())
-                .input(dto.getInput())
+                .inputId(dto.getInputId())
                 .output(dto.getOutput())
                 .build();
     }
