@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ChildRepository extends JpaRepository<ChildEntity, String> {
     List<ChildEntity> findByParentId(String parentId);
-    Optional<ChildEntity> findByChildId(String childId);
+    ChildEntity findByChildId(String childId);
 }
 

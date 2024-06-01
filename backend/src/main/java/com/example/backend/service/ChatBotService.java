@@ -100,8 +100,8 @@ public class ChatBotService {
             log.warn("Unknown parent or child.");
             throw new RuntimeException("Unknown parent or child.");
         }
-        Optional<ChildEntity> childEntityOpt = childRepository.findByChildId(entity.getChildId());
-        if (childEntityOpt.isEmpty() || !entity.getParentId().equals(childEntityOpt.get().getParentId())) {
+        ChildEntity childEntity = childRepository.findByChildId(entity.getChildId());
+        if (childEntity == null || !entity.getParentId().equals(childEntity.getParentId())) {
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }

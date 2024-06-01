@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.model.DiaryEntity;
 import com.example.backend.model.ProfileEntity;
+import com.example.backend.repository.ChildRepository;
 import com.example.backend.repository.DiaryRepository;
 import com.example.backend.repository.ProfileRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,8 @@ public class ProfileService {
     private ProfileRepository profileRepository;
     @Autowired
     private DiaryRepository diaryRepository;
-
+    @Autowired
+    private ChildRepository childRepository;
     public ProfileService(@Value("${python.profile.path}") String pythonProfilePath) {
         this.pythonProfilePath = pythonProfilePath;
     }
@@ -101,10 +103,10 @@ public class ProfileService {
     }
 
     public void validate(String parentId, String childId) {
-        /*if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
+        if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }*/
+        }
     }
 
     public Process runPythonWordCloud(String childId, String fileName) throws IOException {
