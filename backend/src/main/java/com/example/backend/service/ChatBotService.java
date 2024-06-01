@@ -1,7 +1,9 @@
 package com.example.backend.service;
 
 import com.example.backend.model.ChatBotEntity;
+import com.example.backend.model.ChildEntity;
 import com.example.backend.repository.ChatBotRepository;
+import com.example.backend.repository.ChildRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class ChatBotService {
     @Autowired
     private ChatBotRepository chatBotRepository;
+
+    @Autowired
+    private ChildRepository childRepository;
 
     @Value("${openai.api.key.a}")
     private String apiKey;
@@ -86,17 +92,18 @@ public class ChatBotService {
     }
 
     public void validate(ChatBotEntity entity) {
-        if(entity == null) {
+        if (entity == null) {
             log.warn("Entity cannot be null.");
             throw new RuntimeException("Entity cannot be null.");
-        }/*
-        if(entity.getParentId() == null || entity.getChildId() == null) {
+        }
+        if (entity.getParentId() == null || entity.getChildId() == null) {
             log.warn("Unknown parent or child.");
             throw new RuntimeException("Unknown parent or child.");
-        }*//*
-        if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) {
+        }
+        Optional<ChildEntity> childEntityOpt = childRepository.findByChildId(entity.getChildId());
+        if (childEntityOpt.isEmpty() || !entity.getParentId().equals(childEntityOpt.get().getParentId())) {
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }*/
+        }
     }
 }
