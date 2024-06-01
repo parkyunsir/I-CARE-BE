@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.QuestionEntity;
+import com.example.backend.repository.ChildRepository;
 import com.example.backend.repository.QuestionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ public class QuestionService {
 
     @Autowired
     QuestionRepository questionRepository;
-    
+    @Autowired
+    private ChildRepository childRepository;
     // 답변하기
     public QuestionEntity answer(QuestionEntity entity) {
         validate(entity);
@@ -44,14 +46,14 @@ public class QuestionService {
             log.warn("Entity cannot be null.");
             throw new RuntimeException("Entity cannot be null.");
         }
-//        if (entity.getParentId() == null) {
-//            log.warn("Unknown parent");
-//            throw new RuntimeException("Unknown parent");
-//        }
-        /*if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
+        if (entity.getParentId() == null) {
+           log.warn("Unknown parent");
+           throw new RuntimeException("Unknown parent");
+        }
+        if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }*/
+        }
         if (entity.getQuestionId() != null) {
             QuestionEntity original = questionRepository.findByQuestionId(entity.getQuestionId());
             if (!original.getParentId().equals(entity.getParentId())) {

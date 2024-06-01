@@ -27,11 +27,11 @@ public class ChildService {
 
     public ChildEntity show(String parentId, String childId) {
         validateFamily(parentId, childId);
-        return repository.findByChildId(childId).orElseThrow(() -> new RuntimeException("Child not found."));
+        return repository.findByChildId(childId); // Optional을 사용하지 않고 ChildEntity를 반환
     }
 
     public void validateFamily(String parentId, String childId) {
-        ChildEntity child = repository.findByChildId(childId).orElse(null);
+        ChildEntity child = repository.findByChildId(childId);
         if (child == null || !parentId.equals(child.getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
