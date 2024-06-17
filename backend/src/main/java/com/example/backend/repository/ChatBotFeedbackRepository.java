@@ -11,8 +11,7 @@ import java.util.List;
 
 public interface ChatBotFeedbackRepository extends JpaRepository<ChatBotFeedbackEntity, String> {
     //부모와 자식 id 모두 일치
-    @Query(value = "SELECT * FROM Diary WHERE child_id = :childId and parent_id = :parentId", nativeQuery = true)
-    List<ChatBotEntity> findByChildIdAndParentId(@Param("childId") String childId, @Param("parentId") String parentId);
-
     ChatBotFeedbackEntity findByChatBotFeedbackId(String chatBotFeedbackId);
+
+    List<ChatBotFeedbackEntity> findByChildId(String childId);
 }

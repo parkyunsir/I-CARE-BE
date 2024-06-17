@@ -24,6 +24,7 @@ public class ChildController {
         try {
             ChildEntity entity = ChildDTO.toEntity(dto);
             entity.setParentId(parentId);
+            entity.setChildId(null);
             List<ChildEntity> entities = service.create(entity); // 서비스 계층에 entity 생성 요청
             List<ChildDTO> dtos = entities.stream().map(ChildDTO::new).collect(Collectors.toList());
             ResponseDTO<ChildDTO> response = ResponseDTO.<ChildDTO>builder().data(dtos).build();
