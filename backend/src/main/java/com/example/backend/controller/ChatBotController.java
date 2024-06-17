@@ -26,10 +26,10 @@ public class ChatBotController {
             entity.setParentId(parentId);
             entity.setChildId(childId);
             entity.setResponse(null);
-            List<ChatBotEntity> entities = chatBotService.createResponse(entity);
+            ChatBotEntity savedEntity = chatBotService.createResponse(entity);
 
-            List<ChatBotDTO> dtos = entities.stream().map(ChatBotDTO::new).collect(Collectors.toList());
-            return ResponseEntity.ok().body(dtos);
+            ChatBotDTO savedDto = new ChatBotDTO(savedEntity);
+            return ResponseEntity.ok().body(savedDto);
         } catch(Exception e) {
             String error = e.getMessage();
             ResponseDTO<ChatBotDTO> response = ResponseDTO.<ChatBotDTO>builder().error(error).build();

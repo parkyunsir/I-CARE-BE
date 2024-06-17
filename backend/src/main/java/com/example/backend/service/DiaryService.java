@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.DiaryEntity;
+import com.example.backend.repository.ChildRepository;
 import com.example.backend.repository.DiaryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class DiaryService {
     @Autowired
     DiaryRepository diaryRepository;
 
+    @Autowired
+    private ChildRepository childRepository;
     public DiaryEntity create(DiaryEntity entity) {
         validate(entity);
         if(diaryRepository.findByChildIdAndDate(entity.getChildId(), entity.getDate()) != null) {
@@ -36,10 +39,10 @@ public class DiaryService {
     }
 
     public List<DiaryEntity> showDateList(String parentId, String childId, LocalDate startDate, LocalDate endDate) {
-        /*if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
+        if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }*/
+        }
         return diaryRepository.findByStartDateAndEndDateAndChildId(childId, startDate, endDate);
     }
 
@@ -68,15 +71,15 @@ public class DiaryService {
         if(entity == null) {
             log.warn("Entity cannot be null.");
             throw new RuntimeException("Entity cannot be null.");
-        }/*
+        }
         if(entity.getParentId() == null || entity.getChildId() == null) {
             log.warn("Unknown parent or child.");
             throw new RuntimeException("Unknown parent or child.");
-        }*//*
+        }
         if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }*/
+        }
         if(entity.getDiaryId() != null) { // entity, original의 child 인증
             DiaryEntity original = diaryRepository.findByDiaryId(entity.getDiaryId());
             if(!original.getChildId().equals(entity.getChildId())) {
