@@ -43,9 +43,5 @@ public class ChildService {
             log.warn("Entity cannot be null.");
             throw new RuntimeException("Entity cannot be null.");
         }
-        if (entity.getChildId() == null) {
-            log.warn("Unknown child.");
-            throw new RuntimeException("Unknown child.");
-        }
     }
 }

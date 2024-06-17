@@ -64,6 +64,7 @@ public class ChatBotService {
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
 
+        log.info(request.toString());
         try (Response response = client.newCall(request).execute()) {
             if(!response.isSuccessful() || response.body() == null) {
                 throw new IOException("Unexpected : " + response);
