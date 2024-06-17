@@ -36,12 +36,11 @@ public class ChatBotService {
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<ChatBotEntity> createResponse(ChatBotEntity entity) throws IOException {
+    public ChatBotEntity createResponse(ChatBotEntity entity) throws IOException {
         validate(entity);
         String response = getCompletion(entity.getRequest());
         entity.setResponse(response);
-        chatBotRepository.save(entity);
-        return chatBotRepository.findByChildId(entity.getChildId());
+        return chatBotRepository.save(entity);
     }
 
     public String getCompletion(String prompt) throws IOException {
