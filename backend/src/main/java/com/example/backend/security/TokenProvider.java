@@ -34,7 +34,7 @@ public class TokenProvider {
                 .setIssuer("social Login")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .claim("id", parent.getParent_id())
+                .claim("id", parent.getParentId())
                 .compact();
     }
 
@@ -50,7 +50,7 @@ public class TokenProvider {
                 .setIssuer(kakao + " Login")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
-                .claim("id", parent.getParent_id())
+                .claim("id", parent.getParentId())
                 .compact();
     }
 

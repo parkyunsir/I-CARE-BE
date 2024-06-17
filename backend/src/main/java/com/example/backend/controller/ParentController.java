@@ -42,7 +42,7 @@ public class ParentController {
                     .build();
             ParentEntity savedParent = parentService.signup(parent);
             ParentDTO savedParentDto = ParentDTO.builder()
-                    .parent_id(savedParent.getParent_id())
+                    .parentId(savedParent.getParentId())
                     .email(savedParent.getEmail())
                     .nickname(savedParent.getNickname())
                     .build();
@@ -64,7 +64,7 @@ public class ParentController {
         if(parent != null) {
             final String token = tokenProvider.create(parent);
             final ParentDTO loginParentDto = ParentDTO.builder()
-                    .parent_id(parent.getParent_id())
+                    .parentId(parent.getParentId())
                     .email(parent.getEmail())
                     .nickname(parent.getNickname())
                     .token(token)
