@@ -26,9 +26,6 @@ public class ParentService implements UserDetailsService {
         return null;
     }
 
-    //public Parent login(String email) {
-    //}
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return parentRepository.findOptionalByEmail(email)
