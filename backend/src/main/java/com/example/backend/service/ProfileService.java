@@ -103,7 +103,7 @@ public class ProfileService {
     }
 
     public void validate(String parentId, String childId) {
-        if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
+        if(!parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }

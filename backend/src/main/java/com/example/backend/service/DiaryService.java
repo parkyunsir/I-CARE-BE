@@ -75,11 +75,11 @@ public class DiaryService {
         if(entity.getParentId() == null || entity.getChildId() == null) {
             log.warn("Unknown parent or child.");
             throw new RuntimeException("Unknown parent or child.");
-        }
-        if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
+        }/*
+        if(!(entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId()))) { // entity의 parent, child 인증
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }
+        }*/
         if(entity.getDiaryId() != null) { // entity, original의 child 인증
             DiaryEntity original = diaryRepository.findByDiaryId(entity.getDiaryId());
             if(!original.getChildId().equals(entity.getChildId())) {
