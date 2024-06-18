@@ -20,10 +20,10 @@ public class QuestionService {
     // 답변하기
     public QuestionEntity answer(QuestionEntity entity) {
         validate(entity);
-        if (questionRepository.existsByChildIdAndDate(entity.getChildId(), entity.getDate()) != null){
-            log.warn("A question for that date already exists.");
-            throw new RuntimeException("A question for that date already exists.");
-        }
+//        if (questionRepository.existsByChildIdAndDate(entity.getChildId(), entity.getDate()) != null){
+//            log.warn("A question for that date already exists.");
+//            throw new RuntimeException("A question for that date already exists.");
+//        }
         QuestionEntity savedEntity = questionRepository.save(entity); // 없다면 추가하기
         log.info("Entity Id : {} is saved.", savedEntity.getQuestionId());
         return questionRepository.findByQuestionId(savedEntity.getQuestionId());
@@ -50,10 +50,10 @@ public class QuestionService {
            log.warn("Unknown parent");
            throw new RuntimeException("Unknown parent");
         }
-        if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
-            log.warn("Child's parent and current parent do not match.");
-            throw new RuntimeException("Child's parent and current parent do not match.");
-        }
+//        if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
+//            log.warn("Child's parent and current parent do not match.");
+//            throw new RuntimeException("Child's parent and current parent do not match.");
+//        }
         if (entity.getQuestionId() != null) {
             QuestionEntity original = questionRepository.findByQuestionId(entity.getQuestionId());
             if (!original.getParentId().equals(entity.getParentId())) {
