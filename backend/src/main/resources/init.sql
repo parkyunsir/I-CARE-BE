@@ -5,9 +5,9 @@ CREATE TABLE IF NOT EXISTS Icon (
     category VARCHAR(20)
 );
 
-INSERT INTO Icon(font, name) VALUES ('😀', '활짝 웃는 얼굴', 'A');
-INSERT INTO Icon(font, name) VALUES ('🤩', '반한 얼굴', 'A');
-INSERT INTO Icon(font, name) VALUES ('😑', '무표정한 얼굴', 'A');
+INSERT INTO Icon(font, name, category) VALUES ('😀', '활짝 웃는 얼굴', 'A');
+INSERT INTO Icon(font, name, category) VALUES ('🤩', '반한 얼굴', 'A');
+INSERT INTO Icon(font, name, category) VALUES ('😑', '무표정한 얼굴', 'A');
 
 
 ALTER TABLE Diary
