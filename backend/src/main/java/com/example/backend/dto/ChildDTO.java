@@ -21,7 +21,7 @@ public class ChildDTO {
     private String name;
     private String gender;
     private Date birth;
-    private int profile_state;
+    private int profileState;
     public ChildDTO(ChildEntity entity) {
         this.childId= entity.getChildId();
         this.parentId = entity.getParentId();
@@ -29,7 +29,7 @@ public class ChildDTO {
         this.name = entity.getName();
         this.gender = entity.getGender();
         this.birth = entity.getBirth();
-        this.profile_state = entity.getProfile_state();
+        this.profileState = entity.getProfileState();
     }
 
     public static ChildEntity toEntity(final ChildDTO dto) {
@@ -40,7 +40,7 @@ public class ChildDTO {
                 .name(dto.getName())
                 .gender(dto.getGender())
                 .birth(dto.getBirth())
-                .profile_state(dto.getProfile_state())
+                .profileState(dto.getProfileState())
                 .build();
     }
 

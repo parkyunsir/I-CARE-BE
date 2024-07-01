@@ -27,6 +27,6 @@ public class ChildEntity {
     private String name;
     private String gender;
     private Date birth;
-    private int profile_state;
+    private int profileState;
 
 }

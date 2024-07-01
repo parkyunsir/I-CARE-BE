@@ -12,26 +12,26 @@ import java.util.List;
 @Service
 public class ChildService {
     @Autowired
-    private ChildRepository repository;
+    private ChildRepository childRepository;
 
     public List<ChildEntity> create(final ChildEntity entity) {
         validate(entity); // 데이터가 유효한지 검증
-        repository.save(entity); // 엔터티 리파지토리에 저장
+        childRepository.save(entity); // 엔터티 리파지토리에 저장
         log.info("Entity ChildId: {} is saved", entity.getChildId());
-        return repository.findByParentId(entity.getParentId()); // 부모 ID로 저장된 모든 자녀 엔터티를 찾아서 리턴
+        return childRepository.findByParentId(entity.getParentId()); // 부모 ID로 저장된 모든 자녀 엔터티를 찾아서 리턴
     }
 
     public List<ChildEntity> showList(String parentId) {
-        return repository.findByParentId(parentId);
+        return childRepository.findByParentId(parentId);
     }
 
     public ChildEntity show(String parentId, String childId) {
         validateFamily(parentId, childId);
-        return repository.findByChildId(childId); // Optional을 사용하지 않고 ChildEntity를 반환
+        return childRepository.findByChildId(childId); // Optional을 사용하지 않고 ChildEntity를 반환
     }
 
     public void validateFamily(String parentId, String childId) {
-        ChildEntity child = repository.findByChildId(childId);
+        ChildEntity child = childRepository.findByChildId(childId);
         if (child == null || !parentId.equals(child.getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");

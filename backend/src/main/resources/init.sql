@@ -11,4 +11,4 @@ INSERT INTO Icon(font, name, category) VALUES ('😑', '무표정한 얼굴', 'A
 
 
 ALTER TABLE Diary
-ALTER COLUMN content VARCHAR(1000);
+ALTER COLUMN content VARCHAR(500);
