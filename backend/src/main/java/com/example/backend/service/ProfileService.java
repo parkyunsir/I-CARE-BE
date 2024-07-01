@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.ChildEntity;
 import com.example.backend.model.DiaryEntity;
 import com.example.backend.model.ProfileEntity;
 import com.example.backend.repository.ChildRepository;
@@ -60,11 +61,11 @@ public class ProfileService {
 
     public ProfileEntity create(String parentId, String childId) {
         validate(parentId, childId);
-        /*if(childRepository.findByChild(childId).getProfileState() >= 5) {
-
-        } else {
-
-        }*/
+        ChildEntity originalChild = childRepository.findByChildId(childId);
+        if(originalChild.getProfileState() < 5) {
+            log.error("Profile state is insufficient. (profileState < 5)");
+            throw new RuntimeException("Profile state is insufficient. (profileState < 5)");
+        }
         String fileName = LocalDateTime.now().toString().replaceAll("[-:.]", "") +
                 childId.substring(childId.length() - 5) +
                 "_cloud.jpg";
@@ -95,6 +96,8 @@ public class ProfileService {
                     .wordCloud(fileName)
                     .date(LocalDateTime.now())
                     .build();
+            originalChild.setProfileState(0);
+            childRepository.save(originalChild);
             return profileRepository.save(entity);
         } catch (Exception e) {
             log.error(e.getMessage());
