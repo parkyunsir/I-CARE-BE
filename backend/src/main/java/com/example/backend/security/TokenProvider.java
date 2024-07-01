@@ -30,7 +30,7 @@ public class TokenProvider {
         );
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-                .setSubject(parent.getEmail())
+                .setSubject(parent.getParentId())
                 .setIssuer("social Login")
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
