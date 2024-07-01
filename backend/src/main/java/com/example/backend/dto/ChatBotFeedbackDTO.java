@@ -18,6 +18,7 @@ public class ChatBotFeedbackDTO {
     private String childId;
     private LocalDateTime date; //날짜
     private String feedback; //피드백
+    private String parentRequest;
 
     public ChatBotFeedbackDTO(ChatBotFeedbackEntity entity) {
         this.chatBotFeedbackId = entity.getChatBotFeedbackId();
@@ -25,6 +26,7 @@ public class ChatBotFeedbackDTO {
         this.childId = entity.getChildId();
         this.date = entity.getDate();
         this.feedback = entity.getFeedback();
+        this.parentRequest = entity.getParentRequest();
     }
 
     public static ChatBotFeedbackEntity toEntity(final ChatBotFeedbackDTO dto) {
@@ -34,6 +36,7 @@ public class ChatBotFeedbackDTO {
                 .childId(dto.getChildId())
                 .date(dto.getDate())
                 .feedback(dto.getFeedback())
+                .parentRequest(dto.getParentRequest())
                 .build();
     }
 }
