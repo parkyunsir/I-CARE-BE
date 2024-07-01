@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +120,8 @@ public class ProfileService {
     }
 
     public Process startPythonProcess(String pythonWordCloud, String childId, String fileName) throws IOException {
-        List<DiaryEntity> diaryList = diaryRepository.findByChildId(childId);
+        LocalDate threeMonthsAgo = LocalDate.now().minus(3, ChronoUnit.MONTHS);
+        List<DiaryEntity> diaryList = diaryRepository.findByChildIdAndDateAfter(childId, threeMonthsAgo);
 
         File diaryFile = new File(pythonProfilePath + "/diary.txt");
 

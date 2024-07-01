@@ -48,7 +48,7 @@ public class DiaryService {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }*/
-        return diaryRepository.findByStartDateAndEndDateAndChildId(childId, startDate, endDate);
+        return diaryRepository.findByChildIdAndDateBetween(childId, startDate, endDate);
     }
 
     public DiaryEntity update(DiaryEntity entity) {
