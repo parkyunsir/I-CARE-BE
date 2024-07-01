@@ -16,9 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +32,9 @@ public class ChatBotFeedbackService {
 
     @Autowired
     ChildRepository childRepository;
+
+    @Autowired
+    ChatBotService chatBotService;
 
     @Value("${openai.api.key.b}")
     private String apiKey;
@@ -52,16 +54,24 @@ public class ChatBotFeedbackService {
 
         List<ChatBotEntity> chatbots = chatBotRepository.findByChildId(childId); // 챗봇 리스트
 
-        List<String> request = chatbots.stream().map(ChatBotEntity::getRequest).collect(Collectors.toList()); // request 뽑아서 List<String> 으로 만들기
+        String request = chatbots.stream().map(ChatBotEntity::getRequest).collect(Collectors.joining(" ")); // request 뽑아서 List<String> 으로 만들기
 
-        String response = getCompletion("\'" + request.toString()+"\' 부모가 자녀에게 이런 말을 했어. 이에 대한 피드백을 줘.");
+        String response = getCompletion("\'" + request+"\' 부모가 자녀에게 이런 말을 했어. 이에 대한 피드백을 줘.");
+
+        String parentRequest = chatbots.stream()
+                .map(ChatBotEntity::getRequest)
+                .max(Comparator.comparingInt(String::length))
+                .orElse("");
 
         ChatBotFeedbackEntity entity = ChatBotFeedbackEntity.builder()
                 .parentId(parentId)
                 .childId(childId)
                 .date(LocalDateTime.now())
                 .feedback(response)
+                .parentRequest(parentRequest)
                 .build();
+        chatBotService.delete(parentId, childId);
+
         return chatBotFeedbackRepository.save(entity);
     }
 
