@@ -18,6 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="Parent")
 public class ParentEntity implements UserDetails {
     @Id
     @GeneratedValue(generator="system-uuid")
