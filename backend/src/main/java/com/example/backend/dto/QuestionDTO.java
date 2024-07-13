@@ -14,14 +14,16 @@ import java.time.LocalDate;
 public class QuestionDTO {
     private String questionId;
     private LocalDate date;
-    private String inputId;
+    private Long inputId;
     private String output;
+    private String input;
 
     public QuestionDTO(QuestionEntity entity) {
         this.questionId = entity.getQuestionId();
         this.date = entity.getDate();
         this.inputId = entity.getInputId();
         this.output = entity.getOutput();
+        this.input = entity.getInput();
     }
 
     public static QuestionEntity toEntity(QuestionDTO dto){
@@ -30,6 +32,7 @@ public class QuestionDTO {
                 .date(dto.getDate())
                 .inputId(dto.getInputId())
                 .output(dto.getOutput())
+                .input(dto.getInput())
                 .build();
     }
 }

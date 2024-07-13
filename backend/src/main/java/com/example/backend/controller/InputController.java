@@ -5,14 +5,8 @@ import com.example.backend.model.InputEntity;
 import com.example.backend.service.InputService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/question/input")
@@ -21,16 +15,9 @@ public class InputController {
     @Autowired
     public InputService inputService;
 
-    @GetMapping("/list")
-    public ResponseEntity<?> offerInputList(@RequestParam("date") LocalDate date) {
-        List<InputEntity> entities = inputService.offerList(date);
-        List<InputDTO> dtos = entities.stream().map(InputDTO::new).collect(Collectors.toList());
-        return ResponseEntity.ok().body(dtos);
-    }
-
     @GetMapping
-    public ResponseEntity<?> showInput(@RequestParam("date") LocalDate date){
-        InputEntity entity = inputService.show(date);
+    public ResponseEntity<?> showInputDetail(@AuthenticationPrincipal String parentId, @RequestParam("childId") String childId, @RequestParam("inputId") Long inputId) {
+        InputEntity entity = inputService.showInput(inputId);
         InputDTO dto = new InputDTO(entity);
         return ResponseEntity.ok().body(dto);
     }
