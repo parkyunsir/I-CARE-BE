@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.model.InputEntity;
 import com.example.backend.model.QuestionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, String
     List<QuestionEntity> findAllByOutputContaining(String output);
 
     List<QuestionEntity> findByChildId(String childId);
+
+//    InputEntity findByInputId(Long InputId); //inputId를 반환한다.
 
     @Query(value = "SELECT * FROM Question WHERE child_id = :childId and date = :date", nativeQuery = true)
     QuestionEntity existsByChildIdAndDate(@Param("childId") String childId, @Param("date") LocalDate date);

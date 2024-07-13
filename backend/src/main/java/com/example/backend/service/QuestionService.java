@@ -2,11 +2,13 @@ package com.example.backend.service;
 
 import com.example.backend.model.QuestionEntity;
 import com.example.backend.repository.ChildRepository;
+import com.example.backend.repository.InputRepository;
 import com.example.backend.repository.QuestionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Slf4j
@@ -17,6 +19,7 @@ public class QuestionService {
     QuestionRepository questionRepository;
     @Autowired
     private ChildRepository childRepository;
+
     // 답변하기
     public QuestionEntity answer(QuestionEntity entity) {
         validate(entity);
