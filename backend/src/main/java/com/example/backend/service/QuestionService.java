@@ -23,10 +23,10 @@ public class QuestionService {
     // 답변하기
     public QuestionEntity answer(QuestionEntity entity) {
         validate(entity);
-//        if (questionRepository.existsByChildIdAndDate(entity.getChildId(), entity.getDate()) != null){
-//            log.warn("A question for that date already exists.");
-//            throw new RuntimeException("A question for that date already exists.");
-//        }
+        if (questionRepository.existsByChildIdAndDate(entity.getChildId(), entity.getDate()) != null){
+            log.warn("A question for that date already exists.");
+            throw new RuntimeException("A question for that date already exists.");
+        }
         QuestionEntity savedEntity = questionRepository.save(entity); // 없다면 추가하기
         log.info("Entity Id : {} is saved.", savedEntity.getQuestionId());
         return questionRepository.findByQuestionId(savedEntity.getQuestionId());

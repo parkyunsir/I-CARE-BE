@@ -5,7 +5,6 @@ import com.example.backend.dto.ResponseDTO;
 import com.example.backend.model.InputEntity;
 import com.example.backend.model.QuestionEntity;
 import com.example.backend.repository.InputRepository;
-import com.example.backend.service.InputService;
 import com.example.backend.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,6 @@ public class QuestionController {
 
     @Autowired
     QuestionService questionService;
-
-    @Autowired
-    InputService inputService;
 
     @Autowired
     InputRepository inputRepository;
