@@ -6,16 +6,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class InputDTO {
     private Long inputId;
-    private String content;
+    private String input;
 
     public InputDTO(InputEntity entity) {
         this.inputId = entity.getInputId();
-        this.content = entity.getContent();
+        this.input = entity.getInput();
+    }
+
+    public static InputEntity toEntity(InputDTO dto) {
+        return InputEntity.builder()
+                .inputId(dto.getInputId())
+                .input(dto.getInput())
+                .build();
     }
 }
