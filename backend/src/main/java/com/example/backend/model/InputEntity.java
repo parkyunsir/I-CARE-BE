@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 
 @Builder
 @NoArgsConstructor
@@ -19,6 +18,6 @@ public class InputEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inputId;
 
-    private LocalDate date;
-    private String Content;
+    private String input; //input 내용
+
 }

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.ChildEntity;
 import com.example.backend.model.DiaryEntity;
 import com.example.backend.model.ProfileEntity;
 import com.example.backend.repository.ChildRepository;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,11 +63,11 @@ public class ProfileService {
 
     public ProfileEntity create(String parentId, String childId) {
         validate(parentId, childId);
-        /*if(childRepository.findByChild(childId).getProfileState() >= 5) {
-
-        } else {
-
-        }*/
+        ChildEntity originalChild = childRepository.findByChildId(childId);
+        if(originalChild.getProfileState() < 5) {
+            log.error("Profile state is insufficient. (profileState < 5)");
+            throw new RuntimeException("Profile state is insufficient. (profileState < 5)");
+        }
         String fileName = LocalDateTime.now().toString().replaceAll("[-:.]", "") +
                 childId.substring(childId.length() - 5) +
                 "_cloud.jpg";
@@ -95,6 +98,8 @@ public class ProfileService {
                     .wordCloud(fileName)
                     .date(LocalDateTime.now())
                     .build();
+            originalChild.setProfileState(0);
+            childRepository.save(originalChild);
             return profileRepository.save(entity);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -103,7 +108,7 @@ public class ProfileService {
     }
 
     public void validate(String parentId, String childId) {
-        if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
+        if(!parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }
@@ -115,7 +120,8 @@ public class ProfileService {
     }
 
     public Process startPythonProcess(String pythonWordCloud, String childId, String fileName) throws IOException {
-        List<DiaryEntity> diaryList = diaryRepository.findByChildId(childId);
+        LocalDate threeMonthsAgo = LocalDate.now().minus(3, ChronoUnit.MONTHS);
+        List<DiaryEntity> diaryList = diaryRepository.findByChildIdAndDateAfter(childId, threeMonthsAgo);
 
         File diaryFile = new File(pythonProfilePath + "/diary.txt");
 

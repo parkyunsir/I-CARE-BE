@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.ChildEntity;
 import com.example.backend.model.DiaryEntity;
 import com.example.backend.repository.ChildRepository;
 import com.example.backend.repository.DiaryRepository;
@@ -18,6 +19,7 @@ public class DiaryService {
 
     @Autowired
     private ChildRepository childRepository;
+
     public DiaryEntity create(DiaryEntity entity) {
         validate(entity);
         if(diaryRepository.findByChildIdAndDate(entity.getChildId(), entity.getDate()) != null) {
@@ -26,6 +28,9 @@ public class DiaryService {
         }
         DiaryEntity savedEntity = diaryRepository.save(entity);
         log.info("Entity Id : {} is saved.", savedEntity.getDiaryId());
+        ChildEntity originalChild = childRepository.findByChildId(savedEntity.getChildId());
+        originalChild.setProfileState(originalChild.getProfileState() + 1);
+        childRepository.save(originalChild);
         return diaryRepository.findByDiaryId(savedEntity.getDiaryId());
     }
 
@@ -39,11 +44,11 @@ public class DiaryService {
     }
 
     public List<DiaryEntity> showDateList(String parentId, String childId, LocalDate startDate, LocalDate endDate) {
-        if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
+        /*if(parentId.equals(childRepository.findByChildId(childId).getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }
-        return diaryRepository.findByStartDateAndEndDateAndChildId(childId, startDate, endDate);
+        }*/
+        return diaryRepository.findByChildIdAndDateBetween(childId, startDate, endDate);
     }
 
     public DiaryEntity update(DiaryEntity entity) {
@@ -60,6 +65,11 @@ public class DiaryService {
         LocalDate date = entity.getDate();
         try {
             diaryRepository.delete(entity);
+            ChildEntity originalChild = childRepository.findByChildId(entity.getChildId());
+            if(originalChild.getProfileState() > 0) {
+                originalChild.setProfileState(originalChild.getProfileState() - 1);
+                childRepository.save(originalChild);
+            }
         } catch(Exception e) {
             log.error("error deleting entity ", entity.getDiaryId(), e);
             throw new RuntimeException("error deleting entity " + entity.getDiaryId());
@@ -75,11 +85,11 @@ public class DiaryService {
         if(entity.getParentId() == null || entity.getChildId() == null) {
             log.warn("Unknown parent or child.");
             throw new RuntimeException("Unknown parent or child.");
-        }
-        if(!entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId())) { // entity의 parent, child 인증
+        }/*
+        if(!(entity.getParentId().equals(childRepository.findByChildId(entity.getChildId()).getParentId()))) { // entity의 parent, child 인증
             log.warn("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
-        }
+        }*/
         if(entity.getDiaryId() != null) { // entity, original의 child 인증
             DiaryEntity original = diaryRepository.findByDiaryId(entity.getDiaryId());
             if(!original.getChildId().equals(entity.getChildId())) {

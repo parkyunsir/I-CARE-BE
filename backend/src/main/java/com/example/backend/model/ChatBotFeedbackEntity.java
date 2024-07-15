@@ -30,4 +30,5 @@ public class ChatBotFeedbackEntity {
     private String childId;
     private LocalDateTime date;
     private String feedback;
+    private String parentRequest; // request 중 가장 긴 문자열
 }
