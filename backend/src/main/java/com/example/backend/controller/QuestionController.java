@@ -35,7 +35,7 @@ public class QuestionController {
             entity.setQuestionId(null);
             entity.setParentId(parentId); //부모 아이디 설정
             entity.setChildId(childId);
-            entity.setDate(LocalDate.now()); // 지금 시간
+            entity.setDate(LocalDate.now()); // 오늘 날짜
 //            entity.setDate(LocalTime.now().withSecond(0).withNano(0)); // 지금 시간
 
 //            int secondOfDay  = LocalTime.now().getMinute();
