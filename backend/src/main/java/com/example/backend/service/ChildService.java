@@ -32,7 +32,7 @@ public class ChildService {
 
     public void validateFamily(String parentId, String childId) {
         ChildEntity child = childRepository.findByChildId(childId);
-        if (child == null || !parentId.equals(child.getParentId())) {
+        if (!parentId.equals(child.getParentId())) {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }
