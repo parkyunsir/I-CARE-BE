@@ -26,5 +26,6 @@ public class ChatBotEntity {
     private String childId;
     private String request;
     private String response;
+    private Long chatBotTopicId;
 
 }

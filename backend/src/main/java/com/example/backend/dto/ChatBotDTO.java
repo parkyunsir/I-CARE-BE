@@ -14,11 +14,13 @@ public class ChatBotDTO {
     private String chatBotId;
     private String request;
     private String response;
+    private Long chatBotTopicId;
 
     public ChatBotDTO(ChatBotEntity entity) {
         this.chatBotId = entity.getChatBotId();
         this.request = entity.getRequest();
         this.response = entity.getResponse();
+        this.chatBotTopicId = entity.getChatBotTopicId();
     }
 
     public static ChatBotEntity toEntity(final ChatBotDTO dto) {
@@ -26,6 +28,7 @@ public class ChatBotDTO {
                 .chatBotId(dto.getChatBotId())
                 .request(dto.getRequest())
                 .response(dto.getResponse())
+                .chatBotTopicId(dto.getChatBotTopicId())
                 .build();
     }
 }
