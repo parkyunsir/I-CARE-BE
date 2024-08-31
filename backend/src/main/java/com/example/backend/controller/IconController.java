@@ -20,16 +20,16 @@ public class IconController {
     private IconService iconService;
 
     @GetMapping("/select")
-    public ResponseEntity<?> offerIconList(@RequestParam("content") String content) {
-        List<IconEntity> entities = iconService.offerList(content);
-        List<IconDTO> dtos = entities.stream().map(IconDTO::new).collect(Collectors.toList());
-        return ResponseEntity.ok().body(dtos);
+    public ResponseEntity<?> createIcons(@RequestParam("content") String content) {
+        List<String> icons = iconService.create(content);
+        //List<IconDTO> dtos = entities.stream().map(IconDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok().body(icons);
     }
-
+/*
     @GetMapping
     public ResponseEntity<?> showIcon(@RequestParam("iconId") Long iconId) {
         IconEntity entity = iconService.show(iconId);
         IconDTO dto = new IconDTO(entity);
         return ResponseEntity.ok().body(dto);
-    }
+    }*/
 }

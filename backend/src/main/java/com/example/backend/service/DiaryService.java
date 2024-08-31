@@ -55,7 +55,7 @@ public class DiaryService {
         validate(entity);
         DiaryEntity original = diaryRepository.findByDiaryId(entity.getDiaryId());
         original.setContent(entity.getContent());
-        original.setIconId(entity.getIconId());
+        original.setIcon(entity.getIcon());
         diaryRepository.save(original);
         return diaryRepository.findByDiaryId(original.getDiaryId());
     }

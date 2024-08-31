@@ -32,7 +32,7 @@ public class ChatBotService {
     @Autowired
     private ChatBotTopicRepository chatBotTopicRepository;
 
-    @Value("${openai.api.key.a}")
+    @Value("${openai.api.key.b}")
     private String apiKey;
 
     @Value("${openai.model.id.a}")

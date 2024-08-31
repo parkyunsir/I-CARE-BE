@@ -20,14 +20,14 @@ public class DatabaseConfig implements ApplicationRunner {
     public void run(ApplicationArguments args) throws SQLException {
         try(Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
-            List<String> iconSql = List.of(
+            /*List<String> iconSql = List.of(
                     "INSERT INTO Icon(font, name, category) VALUES ('\uD83D\uDE00', '활짝 웃는 얼굴', 'A');",
                     "INSERT INTO Icon(font, name, category) VALUES ('\uD83E\uDD29', '반한 얼굴', 'A');",
                     "INSERT INTO Icon(font, name, category) VALUES ('\uD83D\uDE11', '무표정한 얼굴', 'A');"
             );
             for(String sql : iconSql) {
                 statement.execute(sql);
-            }
+            }*/
             List<String> topicSql = List.of(
                     "INSERT INTO Chat_Bot_Topic(topic) VALUES ('비가 많이 오는데 자녀가 나가서 놀고 싶다고 떼를 쓰는 상황');",
                     "INSERT INTO Chat_Bot_Topic(topic) VALUES ('자녀가 친구와 싸워서 신체적으로 다친 상황');",

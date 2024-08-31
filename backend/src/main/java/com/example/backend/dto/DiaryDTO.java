@@ -16,13 +16,13 @@ public class DiaryDTO {
     private String diaryId;
     private LocalDate date;
     private String content;
-    private Long iconId;
+    private String icon;
 
     public DiaryDTO(DiaryEntity entity) {
         this.diaryId = entity.getDiaryId();
         this.date = entity.getDate();
         this.content = entity.getContent();
-        this.iconId = entity.getIconId();
+        this.icon = entity.getIcon();
     }
 
     public static DiaryEntity toEntity(DiaryDTO dto) {
@@ -30,7 +30,7 @@ public class DiaryDTO {
                 .diaryId(dto.getDiaryId())
                 .date(dto.getDate())
                 .content(dto.getContent())
-                .iconId(dto.getIconId())
+                .icon(dto.getIcon())
                 .build();
     }
 }

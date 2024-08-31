@@ -1,13 +1,17 @@
 package com.example.backend.service;
 
-import com.example.backend.model.DiaryEntity;
+import com.example.backend.dto.DiaryMakerDTO;
 import com.example.backend.model.IconEntity;
 import com.example.backend.repository.IconRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,62 +19,37 @@ import java.util.List;
 @Service
 public class IconService {
     @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
     private IconRepository iconRepository;
 
-    public List<IconEntity> offerList(String content) {
-        return iconRepository.findAll();
-    }
-
-    public IconEntity show(Long iconId) {
-        return iconRepository.findByIconId(iconId);
-    }
-/*
-    public List<IconEntity> offerList(String content) {
+    public List<String> create(String content) {
         try {
-            Process process = runPythonWordCloud(content);
+            DiaryMakerDTO dto = new DiaryMakerDTO(content);
+            String url = "http://127.0.0.1:5000/icon";
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String param = objectMapper.writeValueAsString(dto);
+            HttpEntity<String> httpEntity = new HttpEntity<>(param, headers);
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            String line;
-            while(reader.readLine() != null) {
-                line = reader.readLine();
-                System.out.println(line);
+            JsonNode root = objectMapper.readTree(response.getBody());
+            JsonNode iconsNode = root.path("icons");
+            List<String> iconsList = new ArrayList<>();
+            if (iconsNode.isArray()) {
+                for (JsonNode node : iconsNode) {
+                    iconsList.add(node.asText());
+                }
             }
-            String errorLine;
-            while((errorLine = errorReader.readLine()) != null) {
-                System.out.println(errorLine);
-            }
-
-            process.waitFor();
-
-            if(process.exitValue() != 0) {
-                throw new RuntimeException("Failure for creation wordCloud.");
-            }
-
-            List<IconEntity> entities;
-            //entities.add(0, iconRepository.findByIconId(line));
-            //return entities;
-            return iconRepository.findAll();
-        } catch (Exception e) {
+            return iconsList;
+        } catch (Exception e){
             log.error(e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }
-
-    public Process runPythonWordCloud(String content) throws IOException {
-        String pythonWordCloud = "../python/icon" + "/icon_temporary.py";
-        return startPythonProcess(pythonWordCloud, content);
-    }
-
-    public Process startPythonProcess(String pythonWordCloud, String content) throws IOException {
-        List<String> command = new ArrayList<>();
-        //command.add(pythonProfilePath + "/venv/Scripts/activate.bat");
-        // command.add("&&");
-        command.add("python");
-        command.add(pythonWordCloud);
-        command.add(content);
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        return processBuilder.start();
+/*
+    public IconEntity show(Long iconId) {
+        return iconRepository.findByIconId(iconId);
     }*/
 }

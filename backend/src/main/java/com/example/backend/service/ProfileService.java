@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.DiaryMakerDTO;
 import com.example.backend.model.ChildEntity;
 import com.example.backend.model.DiaryEntity;
 import com.example.backend.model.ProfileEntity;
@@ -8,33 +9,33 @@ import com.example.backend.repository.DiaryRepository;
 import com.example.backend.repository.ProfileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class ProfileService {
-    private final String pythonProfilePath;
+    @Autowired
+    private ObjectMapper objectMapper;
     @Autowired
     private ProfileRepository profileRepository;
     @Autowired
     private DiaryRepository diaryRepository;
     @Autowired
     private ChildRepository childRepository;
-    public ProfileService(@Value("${python.profile.path}") String pythonProfilePath) {
-        this.pythonProfilePath = pythonProfilePath;
-    }
 
     public List<ProfileEntity> showList(String parentId, String childId) {
         validate(parentId, childId);
@@ -54,8 +55,17 @@ public class ProfileService {
         try {
             ProfileEntity entity = show(parentId, childId, profileId);
             String fileName = entity.getWordCloud();
-            Path file = Paths.get(pythonProfilePath + "/images/").resolve(fileName);
-            return new UrlResource(file.toUri());
+
+            String url = "http://127.0.0.1:5000/profile?fileName=" + fileName;
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class);
+
+            if(response.getStatusCode().is2xxSuccessful()) {
+                ByteArrayResource resource = new ByteArrayResource(response.getBody());
+                return resource;
+            } else {
+                throw new RuntimeException("Failed to retrieve image from Flask server");
+            }
         } catch(Exception e) {
             throw new RuntimeException("Could not read file: ", e);
         }
@@ -69,27 +79,23 @@ public class ProfileService {
             throw new RuntimeException("Profile state is insufficient. (profileState < 5)");
         }
         String fileName = LocalDateTime.now().toString().replaceAll("[-:.]", "") +
-                childId.substring(childId.length() - 5) +
-                "_cloud.jpg";
+                childId.substring(childId.length() - 5) + "_cloud.jpg";
         try {
-            Process process = runPythonWordCloud(childId, fileName);
+            LocalDate threeMonthsAgo = LocalDate.now().minus(3, ChronoUnit.MONTHS);
+            List<DiaryEntity> diaryList = diaryRepository.findByChildIdAndDateAfter(childId, threeMonthsAgo);
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            String line;
-            while((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-            String errorLine;
-            while((errorLine = errorReader.readLine()) != null) {
-                System.out.println(errorLine);
-            }
+            String combinedContent = diaryList.stream()
+                    .map(DiaryEntity::getContent)
+                    .collect(Collectors.joining("\n"));
 
-            process.waitFor();
-
-            if(process.exitValue() != 0) {
-                throw new RuntimeException("Failure for creation wordCloud.");
-            }
+            DiaryMakerDTO dto = new DiaryMakerDTO(combinedContent, fileName);
+            String url = "http://127.0.0.1:5000/profile";
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            String param = objectMapper.writeValueAsString(dto);
+            HttpEntity<String> httpEntity = new HttpEntity<>(param, headers);
+            restTemplate.postForObject(url, httpEntity, String.class);
 
             ProfileEntity entity = ProfileEntity.builder()
                     .profileId(null)
@@ -112,35 +118,5 @@ public class ProfileService {
             log.error("Child's parent and current parent do not match.");
             throw new RuntimeException("Child's parent and current parent do not match.");
         }
-    }
-
-    public Process runPythonWordCloud(String childId, String fileName) throws IOException {
-        String pythonWordCloud = pythonProfilePath + "/wordCloud.py";
-        return startPythonProcess(pythonWordCloud, childId, fileName);
-    }
-
-    public Process startPythonProcess(String pythonWordCloud, String childId, String fileName) throws IOException {
-        LocalDate threeMonthsAgo = LocalDate.now().minus(3, ChronoUnit.MONTHS);
-        List<DiaryEntity> diaryList = diaryRepository.findByChildIdAndDateAfter(childId, threeMonthsAgo);
-
-        File diaryFile = new File(pythonProfilePath + "/diary.txt");
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(diaryFile))) {
-            for (DiaryEntity diary : diaryList) {
-                writer.write(diary.getContent());
-                writer.newLine();
-            }
-        }
-
-        List<String> command = new ArrayList<>();
-        command.add(pythonProfilePath + "/venv/Scripts/activate.bat");
-        command.add("&&");
-        command.add("python");
-        command.add(pythonWordCloud);
-        command.add(diaryFile.getAbsolutePath());
-        command.add(fileName);
-
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        return processBuilder.start();
     }
 }

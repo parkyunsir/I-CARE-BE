@@ -24,5 +24,5 @@ public class DiaryEntity {
     private String childId;
     private LocalDate date;
     private String content;
-    private Long iconId;
+    private String icon;
 }
